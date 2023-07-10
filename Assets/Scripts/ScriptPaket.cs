@@ -21,9 +21,6 @@ public class ScriptPaket : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            //Increase the score in the scoring script.    
-            Scoring.score += 1;
-
             mobil.GetComponent<Delivery>().hasPackage=true;
             mobil.GetComponent<Delivery>().spriteRenderer.color =Color.magenta;
             Destroy(this.gameObject, 0.5f);

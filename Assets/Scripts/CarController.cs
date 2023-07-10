@@ -1,26 +1,61 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-[RequireComponent(typeof(Rigidbody), typeof(BoxCollider))]
 public class CarController : MonoBehaviour
+
 {
-    [SerializeField] private Rigidbody _rigidbody;
-    [SerializeField] private FixedJoystick _joystick;
-    [SerializeField] private Animator _animator;
+    bool Boost;
+    private float timerboost = 5.0f;
+    private float timer = 0.0f;
+    [SerializeField] float steerSpeed = 2f;
+    [SerializeField] float MoveSpeed = 20f;
+    [SerializeField] float slowSpeed = 15f;
+    [SerializeField] float boostSpeed = 100f;
 
-    [SerializeField] private float _moveSpeed;
+    public FixedJoystick Joystick;
+    Rigidbody2D rb;
+    Vector2 move;
+    
 
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+    private void Update()
+    {
+
+        move.x = Joystick.Horizontal;
+        move.y = Joystick.Vertical;
+
+        float hAxis = move.x;
+        float vAxis = move.y;
+        float zAxis = Mathf.Atan2(hAxis, vAxis) * Mathf.Rad2Deg;
+        transform.eulerAngles = new Vector3(0f, 0f, -zAxis);
+        if (Boost)
+        {
+
+            timer += Time.deltaTime;
+            if (timer > timerboost)
+            {
+                Boost = false;
+                timer = 0.0f;
+                MoveSpeed = 70.0f;
+            }
+        }
+    }
     private void FixedUpdate()
     {
-        _rigidbody.velocity = new Vector3(_joystick.Horizontal * _moveSpeed, _rigidbody.velocity.y, _joystick.Vertical * _moveSpeed);
+        rb.MovePosition(rb.position + move * MoveSpeed * Time.fixedDeltaTime);
+    }
 
-        if (_joystick.Horizontal != 0 || _joystick.Vertical != 0)
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Boost")
         {
-            transform.rotation = Quaternion.LookRotation(_rigidbody.velocity);
-            _animator.SetBool("isRunning", true);
+            Debug.Log("gacor");
+            Boost = true;
+            MoveSpeed = boostSpeed;
+            Destroy(other.gameObject, 0.5f);
         }
-        else
-            _animator.SetBool("isRunning", false);
     }
 }

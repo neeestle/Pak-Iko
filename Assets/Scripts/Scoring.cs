@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Scoring : MonoBehaviour
 {
     public static int score; // Declaration of the static integer variable "score"
+    public TextMeshProUGUI scoreText;
+ 
+    
 
     public GameObject CanvaWin; // Reference to the Canvas object for displaying the "You win" message
 
@@ -44,6 +48,7 @@ public class Scoring : MonoBehaviour
     {
         score += 1;
         CheckWinCondition(); // Call the check function after each score increment
+        scoreText.text = score.ToString();
 
         Debug.Log("Item picked up! Score: " + score); // Show a message in the console
     }

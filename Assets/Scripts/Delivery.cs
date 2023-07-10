@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using TMPro;
 
 public class Delivery : MonoBehaviour
 {
 
-    public GameObject PaketDiambil;
-    public static int score;
+    
+    public int score = 0;
     public GameObject CanvaWin;
-
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI scoreText2;
     [SerializeField] Color32 hasPackageColor = new Color32(1, 1, 1, 1);
     [SerializeField] Color32 noPackageColor = new Color32(1, 1, 1, 1);
     public bool hasPackage;
@@ -37,17 +40,18 @@ public class Delivery : MonoBehaviour
             score += 1;
             CheckWinCondition(); // Call the check function after each score increment
             Debug.Log("Delivered! Score: " + score);// Show a message in the console
+            scoreText.text = "Score: " + score;
+            scoreText2.text = " " + score;
+            //Increase the score in the scoring script.
 
-            //Increase the score in the scoring script.    
-            Scoring.score += 1;
 
         }
-       
+
     }
 
- private void CheckWinCondition()
+    private void CheckWinCondition()
     {
-        if (score == 1)
+        if (score == 5)
         {
             YouWin();
         }
@@ -62,5 +66,4 @@ public class Delivery : MonoBehaviour
         // Stop the game or perform any other necessary actions
         // ...
     }
-
 }
